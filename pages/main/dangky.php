@@ -1,240 +1,146 @@
 <?php
-ob_start();
-// Kiểm tra xem nút dangky có tồn tại hay ko 
 if (isset($_POST['dangky'])) {
-	// Lấy dữ liệu input 
-	$tenkhachhang = $_POST['hovaten'];
-	$email = $_POST['email'];
-	$dienthoai = $_POST['dienthoai'];
-
-	$matkhau = md5($_POST['matkhau']);
-	$diachi = $_POST['diachi'];
-	$sql_dangky = mysqli_query($mysqli, "INSERT INTO dangky(tenkhachhang,email,diachi,matkhau,dienthoai) VALUE('" . $tenkhachhang . "','" . $email . "','" . $diachi . "','" . $matkhau . "','" . $dienthoai . "')");
-	if ($sql_dangky) {
-		$message = "Bạn đã đăng ký thành công!";
-		echo "<script type='text/javascript'>alert('$message');</script>";
-		// $_SESSION['dangky'] = $tenkhachhang;
-		// $_SESSION['email'] = $email;
-
-		$_SESSION['id_khachhang'] = mysqli_insert_id($mysqli);
-		ob_end_flush();
-		header('Location:index.php?quanly=dangnhap');
-	}
+    $tenkhachhang = $_POST['hovaten'];
+    $email = $_POST['email'];
+    $dienthoai = $_POST['dienthoai'];
+    
+    $matkhau = md5($_POST['matkhau']);
+    $diachi = $_POST['diachi'];
+    $sql_dangky = mysqli_query($mysqli, "INSERT INTO dangky(tenkhachhang,email,diachi,matkhau,dienthoai) VALUE('" . $tenkhachhang . "', '" . $email . "', '" . $diachi . "', '" . $matkhau . "', '" . $dienthoai . "')");
+    if ($sql_dangky) {
+        echo '<p style="color: green;">Bạn đã đăng ký thành công.</p>';
+        $_SESSION['dangky'] = $tenkhachhang;
+        $_SESSION['email'] = $email;
+        
+        $_SESSION['id_khachhang'] = mysqli_insert_id($mysqli);
+        header('Location:index.php?quanly=giohang');
+    }
 }
-
 ?>
-<style>
-	::after {
-		box-sizing: border-box;
-	}
 
-	body {
-		background: #282828;
-	}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	.top-main {
-		display: none;
-	}
+        <link rel="stylesheet" href="css/dangky.css">
+        <script src="js/register.js" ></script>
+        <style>
+            .slider{
+                display: none;
+            }
+        </style>
 
-	#main {
-		border: none;
-	}
+    </head>
+    <!-- <body>
+    <form action="" autocomplete="off" method="POST" name="formRegister" id="loginform" > 
+   
+    <div class=" container_form">
+      <a class="name-form">ĐĂNG KÝ TÀI KHOẢN</a>
 
-	.slider {
-		display: none;
-	}
+      <div class="form">
+          <input type="text" class="form__input" id="hovaten" autocomplete="off" placeholder=" " name="hovaten">
+          <label for="email" class="form__label">Họ và Tên</label>
+          
+      </div>
+      <span id="hovaten_error">a</span>
 
-	.sidebar {
-		display: none;
-	}
+      <div class="form">
+          <input type="text" class="form__input" id="dienthoai" autocomplete="off" placeholder=" " name="dienthoai">
+          <label for="email" class="form__label">Điện Thoại</label>
+          
+      </div>
+      <span id="dienthoai_error">b</span>
 
-	.main-content {
-		width: 100%;
-	}
-</style>
-<div class="clear"></div>
-<div class="breadcrumb-wrapper clearfix">
-	<div class="wrapper clearfix">
-		<div class="breadcrumb-box fl">
-			<ul class="breadcrumb">
-				<li>
-					<a href="/">Trang chủ</a>
-				</li>
-				<li>
-					<a href="#  " rel="category tag">Đăng ký</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-</div>
-<div class="content-box">
-	<h1 class="box-title tp_title">Đăng ký tài khoản miễn phí</h1>
-	<p class="intro-user"></p>
-	<form id="formAcount" action="" method="POST">
-		<div class="form-group">
-			<input type="text" id="email" class="form-input" placeholder="Họ và tên" name="hovaten">
-			<!-- <label for="email" class="form__label">Họ và Tên</label> -->
-		</div>
-		<div class="form-group">
-			<input type="email" id="email" class="form-input" placeholder="Email" name="email">
-			<!-- <label for="email" class="form__label"></label> -->
-		</div>
-		<div class="form-group">
-			<input type="text" id="email" class="form-input" placeholder="Số điện thoại" name="dienthoai">
-			<!-- <label for="email" class="form__label">Điện Thoại</label> -->
-		</div>
-		<div class="form-group">
-			<input type="text" id="email" class="form-input" placeholder="Địa chỉ" name="diachi">
-			<!-- <label for="email" class="form__label">Địa Chỉ</label> -->
-		</div>
-		<div class="form-group">
-			<input type="password" id="email" class="form-input" placeholder="Mật khẩu" name="matkhau">
-			<!-- <label for="email" class="form__label"></label> -->
-		</div>
-		<div class="form-group">
-			<label class="checkbox-user">
-				<input type="checkbox" name="checkValids">
-				<div id="checkbox-content">Đồng ý điều khoản tài khoản &amp; chính sách</div>
-			</label>
-		</div>
-		<div class="form-group">
-			<button type="submit" name="dangky" id="btnRegister" class="btn-register">
-				Đăng ký </button>
-		</div>
-	</form>
-	<div class="clr"></div>
-</div>
-<!-- <style type="text/css">
-	* {
-		font-size: 17px;
-		margin: 0;
-		padding: 0;
-	}
+      <div class="form">
+          <input type="text" class="form__input" id="diachi" autocomplete="off" placeholder=" " name="diachi">
+          <label for="email" class="form__label">Địa Chỉ</label>
+          
+      </div>
+      <span id="diachi_error">c</span>
 
-	.container_form {
-		position: relative;
-		height: 500px;
-
-	}
-
-	.name-form {
-		font-size: 30px;
-		font-weight: bold;
-		position: relative;
-		left: 275px;
-		top: 10px;
-		color: black;
-
-	}
-
-	.form {
-		position: relative;
-		width: 300px;
-		height: 30px;
-		padding: 30px;
-	}
-
-	.form__input {
-		position: absolute;
-		width: 100%;
-		height: 70%;
-		left: 280px;
-		border: 2.4px solid #333;
-		border-radius: 5px;
-		font-size: 10px;
-		background: none;
-		font-size: 18px;
-		outline: none;
-
-	}
-
-	.form__input:focus {
-		border-color: rgb(0, 21, 255);
-
-	}
-
-	.form__label {
-		position: relative;
-		left: 260px;
-		top: 10px;
-		padding: 0;
-		transition: 0.3s cubic-bezier(.79, 0, .16, .99);
-		background-color: #f4f4f4;
-	}
-
-	.form__input:focus~.form__label,
-	.form__input:not(:placeholder-shown).form__input:not(:focus)~.form__label {
-		top: -15px;
-		font-size: 18px;
-		left: 255px;
-		padding: 0 10px;
-		color: rgb(0, 21, 255);
-		font-weight: bold;
-	}
+      <div class="form">
+          <input type="text" id="email" class="form__input" itemid="username" autocomplete="off" placeholder=" " name="email">
+          <label for="email" class="form__label">Tài Khoản Email</label>
+          
+      </div>
+      <span id="username_error">d</span>
+      <div class="form">
+          <input type="password" class="form__input" id="password" autocomplete="off" placeholder=" " name="matkhau">
+          <label for="password" class="form__label">Mật Khẩu</label>
+          
+      </div>
+      <span id="password_error">e</span>
 
 
-	.submit {
-		position: relative;
-		top: 40px;
-		font-size: 15px;
-		font-weight: bold;
-		width: 120px;
-		height: 30px;
-		border-radius: 5px;
-		left: 280px;
-		cursor: pointer;
-		color: black;
-		border: 2px solid #333;
-	}
-
-	.submit:hover {
-		color: blue;
-		transition: 1s;
-		font-size: 18px;
-		font-weight: bold;
-	}
-
-	.dntk {
-		position: relative;
-		left: 370px;
-		top: 40px;
-		color: blue;
-		text-decoration: none;
-	}
-</style>
-<form action="" autocomplete="off" method="POST">
-	<div class=" container_form">
-		<a class="name-form">ĐĂNG KÝ TÀI KHOẢN</a>
-
-		<div class="form">
-			<input type="text" id="email" class="form__input" autocomplete="off" placeholder=" " name="hovaten">
-			<label for="email" class="form__label">Họ và Tên</label>
-		</div>
-
-		<div class="form">
-			<input type="text" id="email" class="form__input" autocomplete="off" placeholder=" " name="dienthoai">
-			<label for="email" class="form__label">Điện Thoại</label>
-		</div>
+          <input type="submit" name="dangky" id="dangky" value="Đăng ký" class="submit" onclick="return validate();">
+          <a href="index.php?quanly=dangnhap" class="dntk">Đăng nhập</a>
+        
+      </div>
 
 
-		<div class="form">
-			<input type="text" id="email" class="form__input" autocomplete="off" placeholder=" " name="diachi">
-			<label for="email" class="form__label">Địa Chỉ</label>
-		</div>
+      </div>
 
 
-		<div class="form">
-			<input type="text" id="email" class="form__input" autocomplete="off" placeholder=" " name="email">
-			<label for="email" class="form__label">Tài Khoản</label>
-		</div>
-		<div class="form">
-			<input type="password" id="email" class="form__input" autocomplete="off" placeholder=" " name="matkhau">
-			<label for="email" class="form__label">Mật Khẩu</label>
-		</div>
+    </body> -->
 
 
-		<input type="submit" name="dangky" value="Đăng ký" class="submit">
-		<a href="index.php?quanly=dangnhap" class="dntk">Đăng nhập</a>
+        <form method="post" action="" id="reform" name="reform">
+            <div class="container_form">
+            <a class="name-form">ĐĂNG KÝ TÀI KHOẢN</a>
+            <table cellpadding="10" class="table">
+                    <tr>
+                    <td>Email: </td>
+                    <td>
+                        <input type="text" id="email" name="email" value=""/>
+                        <span id="email_error"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mật khẩu: </td>
+                    <td>
+                        <input type="password" id="matkhau" name="matkhau" value=""/>
+                        <span id="matkhau_error"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nhập lại mật khẩu: </td>
+                    <td>
+                        <input type="password" id="repassword" name="repassword" value=""/>
+                        <span id="repassword_error"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Địa thoại: </td>
+                    <td>
+                        <input type="text" id="dienthoai" name="dienthoai" value=""/>
+                        <span id="dienthoai_error"></span>
+                    </td>
+                </tr>
+                
 
-	</div>
-</form> -->
+                <tr>
+                    <td>Địa chỉ: </td>
+                    <td>
+                        <input type="text" id="diachi" name="diachi" value=""/>
+                        <span id="diachi_error"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+
+                        <input type="submit" class="submit" onclick="return validate();" id="dangky" name="dangky" value="Đăng ký"/>
+                        <a href="index.php?quanly=dangnhap" class="dntk">Đăng nhập</a>
+                    </td>
+                </tr>
+            </table>
+            </div>
+            <button id="white-btn">Nền trắng</button>
+            <button id="black-btn">Nền đen</button>
+        </form>
+    </body>
+</html>
